@@ -20,11 +20,10 @@ int main(int argc, char **argv)
     GDBM_FILE dbf;
 
     int block_size = 0;
-    char key[10];
 
     key_data.dptr = NULL;
 
-    dbf = gdbm_open("custom_enc_dic", block_size, GDBM_WRCREAT | GDBM_FAST, 00664, NULL);
+    dbf = gdbm_open("custom_enc_dic", block_size, GDBM_WRCREAT, 00664, NULL);
     if (dbf == NULL)
     {
         perror("DB file open error\n");
@@ -33,10 +32,8 @@ int main(int argc, char **argv)
 
     for (int i = 1; i <= count; i++)
     {
-        sprintf(key, "%d", i);
-
-        key_data.dptr = key;
-        key_data.dsize = strlen(key) + 1;
+        key_data.dptr = (char *)&i;
+        key_data.dsize = sizeof(int);
 
         return_data = gdbm_fetch(dbf, key_data);
         free(return_data.dptr);
@@ -45,6 +42,6 @@ int main(int argc, char **argv)
 
     gettimeofday(&after, NULL);
     printf("time: %0.8f sec\n", (after.tv_sec - before.tv_sec) + 1e-6 * (after.tv_usec - before.tv_usec));
-    
+
     return 0;
 }

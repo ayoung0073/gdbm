@@ -23,11 +23,7 @@ int main(int argc, char **argv)
 
     int block_size = 0;
 
-    char key[10];
-    char value[20];
-
     key_data.dptr = NULL;
-    value_data.dptr = value;
 
     dbf = gdbm_open("custom_enc_dic", block_size, GDBM_WRCREAT | GDBM_FAST, 00664, NULL);
     if (dbf == NULL)
@@ -38,10 +34,8 @@ int main(int argc, char **argv)
 
     for (int i = 1; i <= count; i++)
     {
-        sprintf(key, "%d", i);
-
-        key_data.dptr = key;
-        key_data.dsize = strlen(key) + 1;
+        key_data.dptr = (char *)&i;
+        key_data.dsize = sizeof(int);
 
         return_data = gdbm_fetch(dbf, key_data);
         free(return_data.dptr);
@@ -50,10 +44,8 @@ int main(int argc, char **argv)
 
     for (int i = 1; i <= count; i++)
     {
-        sprintf(key, "%d", i);
-
-        key_data.dptr = key;
-        key_data.dsize = strlen(key) + 1;
+        key_data.dptr = (char *)&i;
+        key_data.dsize = sizeof(int);
 
         if (gdbm_delete(dbf, key_data) != 0)
         {

@@ -20,7 +20,6 @@ int main(int argc, char **argv)
     GDBM_FILE dbf;
 
     int block_size = 0;
-    char key[10];
 
     key_data.dptr = NULL;
 
@@ -33,10 +32,8 @@ int main(int argc, char **argv)
 
     for (int i = 1; i <= count; i++)
     {
-        sprintf(key, "%d", i);
-
-        key_data.dptr = key;
-        key_data.dsize = strlen(key) + 1;
+        key_data.dptr = (char *)&i;
+        key_data.dsize = sizeof(int);
 
         if (gdbm_delete(dbf, key_data) != 0)
         {
