@@ -5,7 +5,9 @@
 #include <gdbm.h>
 #include <sys/time.h>
 
-struct timeval before, after; 
+#define DIFF(a, b) ((a) >= (b) ? (a) - (b) : (b) - (a))
+
+struct timeval before, after;
 
 int main(int argc, char **argv)
 {
@@ -61,7 +63,7 @@ int main(int argc, char **argv)
     }
 
     gettimeofday(&after, NULL);
-    printf("time: %0.8f sec\n", (after.tv_sec - before.tv_sec) + 1e-6 * (after.tv_usec - before.tv_usec));
+    printf("time: %0.8f sec\n", (after.tv_sec - before.tv_sec) + 1e-6 * DIFF(after.tv_usec, before.tv_usec));
 
     return 0;
 }

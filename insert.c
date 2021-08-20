@@ -5,6 +5,8 @@
 #include <gdbm.h>
 #include <sys/time.h>
 
+#define DIFF(a, b) ((a) >= (b) ? (a) - (b): (b) - (a))
+
 struct timeval before, after;
 
 int main(int argc, char **argv)
@@ -26,7 +28,7 @@ int main(int argc, char **argv)
 
     key_data.dptr = NULL;
 
-    dbf = gdbm_open("custom_enc_dic", block_size, GDBM_WRCREAT | GDBM_FAST, 00664, NULL);
+    dbf = gdbm_open("custom_enc_dic", block_size, GDBM_WRCREAT, 00664, NULL);
     if (dbf == NULL)
     {
         perror("DB file open error\n");
@@ -52,7 +54,7 @@ int main(int argc, char **argv)
     }
 
     gettimeofday(&after, NULL);
-    printf("time: %0.8f sec\n", (after.tv_sec - before.tv_sec) + 1e-6 * (after.tv_usec - before.tv_usec));
+    printf("time: %0.8f sec\n", (after.tv_sec - before.tv_sec) + 1e-6 * DIFF(after.tv_usec, before.tv_usec));
 
     return 0;
 }
